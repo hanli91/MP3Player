@@ -36,15 +36,18 @@ public class ControllerPanel extends JPanel {
   private JLabel totalTimeLabel;
   private JSlider slider;
   private MediaPlayer player;
+  private LyricPanel lyricPanel;
   private TimerThread timerThread;
   private ChangeListener sliderChangeListener;
   
   public static boolean paused = true;
   public static boolean toggled = false;
   
-  public ControllerPanel(MediaPlayer player) {
+  public ControllerPanel(MediaPlayer player,LyricPanel lyricPanel) {
     this.setBackground(Global.DARK_WHITE);
     this.player = player;
+    this.lyricPanel = lyricPanel;
+    
     this.setSize(1080, 100);
     
     this.playButton = new RoundButton("", 60, 60, 25, ButtonType.PLAY);
@@ -60,12 +63,15 @@ public class ControllerPanel extends JPanel {
     this.playButton.setFont(Global.Helvetica);
     this.prevButton.setFont(Global.Helvetica);
     this.nextButton.setFont(Global.Helvetica);
+    
     this.slider = new JSlider();
     this.slider.setValue(0);
     this.slider.setPreferredSize(new Dimension(700, 60));
+    
     this.playedTimeLabel = new JLabel("00:00");
     this.playedTimeLabel.setFont(Global.Helvetica);
     this.playedTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    
     this.totalTimeLabel = new JLabel("00:00");
     this.totalTimeLabel.setFont(Global.Helvetica);
     this.totalTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -132,7 +138,7 @@ public class ControllerPanel extends JPanel {
         }
         
         if (!paused) {
-          timerThread = new TimerThread(player, slider, playedTimeLabel);
+          timerThread = new TimerThread(player, slider, playedTimeLabel,lyricPanel);
           timerThread.start();
           try {
             player.play();
@@ -165,7 +171,7 @@ public class ControllerPanel extends JPanel {
             paused = false;
             try {
               // System.out.println("Frame: " + player.getCurrentFrame());
-              timerThread = new TimerThread(player, slider, playedTimeLabel);
+              timerThread = new TimerThread(player, slider, playedTimeLabel,lyricPanel);
               timerThread.start();
               player.play();
             } catch (Exception e1) {
@@ -193,11 +199,13 @@ class TimerThread extends Thread {
   MediaPlayer player;
   JSlider slider;
   JLabel playedTimeLabel;
+  LyricPanel lyricPanel;
   
-  public TimerThread(MediaPlayer player, JSlider slider, JLabel playedTimeLabel) {
+  public TimerThread(MediaPlayer player, JSlider slider, JLabel playedTimeLabel,LyricPanel lyricPanel) {
     this.player = player;
     this.slider = slider;
     this.playedTimeLabel = playedTimeLabel;
+    this.lyricPanel  = lyricPanel;
   }
   
   @Override
@@ -209,6 +217,7 @@ class TimerThread extends Thread {
         int value = (int) (curFrame * 1.0 / totalFrame * slider.getMaximum());
         this.slider.setValue(value);
         this.playedTimeLabel.setText(String.format("%02d:%02d", value / 60, value % 60));
+        this.lyricPanel.repaint(value);
         try {
           Thread.sleep(100);
         } catch (InterruptedException e) {
