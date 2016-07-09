@@ -44,12 +44,12 @@ public class MediaPlayer
   public AudioProperty audioProperty;
   public PlayerThread playerThread;
   
-  public static void main(String[] args) throws Exception {
-    String music = "./music/ne.mp3";
-    MediaPlayer player = new MediaPlayer(music);
-    player.play(0, 382);
-    player.play(280, 200);
-  }
+//  public static void main(String[] args) throws Exception {
+//    String music = "./music/ne.mp3";
+//    MediaPlayer player = new MediaPlayer(music);
+//    player.play(0, 382);
+//    player.play(280, 200);
+//  }
 
   /**
    * Creates a new MusicFilePlayer instance.
@@ -248,6 +248,7 @@ public class MediaPlayer
               start = frameNumber;
           }
           resumePosition = -1;
+          System.out.println("start: " + start);
           playFrames(start, frameCount);
       }
   }
@@ -307,7 +308,7 @@ public class MediaPlayer
    */
   private void moveTo(int position) throws JavaLayerException
   {
-      if(position < frameNumber) {
+      //if(position < frameNumber) {
           synchronized(this) {
               // Already played too far.
               if(bitstream != null) {
@@ -324,7 +325,7 @@ public class MediaPlayer
               openBitstream(filename);
               frameNumber = 0;
           }
-      }
+      //}
       
       while(frameNumber < position) {
           skipFrame();

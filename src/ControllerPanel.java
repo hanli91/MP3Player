@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -38,17 +39,17 @@ public class ControllerPanel extends JPanel {
   
   public ControllerPanel(MediaPlayer player) {
     this.setBackground(Global.DARK_WHITE);
+    this.setPreferredSize(Global.CONTROLLER_PANEL_SIZE);
     this.player = player;
-    this.setSize(1080, 100);
     
-    this.playButton = new RoundButton("", 60, 60, 25, ButtonType.PLAY);
+    this.playButton = new RoundButton("", 60, 50, 22, ButtonType.PLAY);
     this.playButton.setBackground(Global.DEEP_BLUE);
     // this.playButton.setPreferredSize(new Dimension(50, 50));
     
-    this.prevButton = new RoundButton("", 60, 60, 20, ButtonType.PREV);
+    this.prevButton = new RoundButton("", 60, 50, 18, ButtonType.PREV);
     this.prevButton.setBackground(Global.DEEP_BLUE);
     
-    this.nextButton = new RoundButton("", 60, 60, 20, ButtonType.NEXT);
+    this.nextButton = new RoundButton("", 60, 50, 18, ButtonType.NEXT);
     this.nextButton.setBackground(Global.DEEP_BLUE);
 
     this.playButton.setFont(Global.Helvetica);
@@ -56,7 +57,7 @@ public class ControllerPanel extends JPanel {
     this.nextButton.setFont(Global.Helvetica);
     this.slider = new JSlider();
     this.slider.setValue(0);
-    this.slider.setPreferredSize(new Dimension(700, 60));
+    this.slider.setPreferredSize(new Dimension(700, 50));
     this.playedTimeLabel = new JLabel("00:00");
     this.playedTimeLabel.setFont(Global.Helvetica);
     this.playedTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -65,7 +66,7 @@ public class ControllerPanel extends JPanel {
     this.totalTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
     // GridLayout layout = new GridLayout(1, 50);
     // BoxLayout layout = new BoxLayout();
-     // this.setLayout(layout);
+    // this.setLayout(layout);
     this.add(prevButton);
     this.add(playButton);
     this.add(nextButton);
@@ -76,6 +77,8 @@ public class ControllerPanel extends JPanel {
     this.sliderChangeListener = new ChangeListener() {
       @Override
       public void stateChanged(ChangeEvent e) {
+        int value = slider.getValue();
+        playedTimeLabel.setText(String.format("%02d:%02d", value / 60, value % 60));
         if (!slider.getValueIsAdjusting()) {
           // System.out.println("curValue: " + slider.getValue());
         }
@@ -83,7 +86,7 @@ public class ControllerPanel extends JPanel {
    };
     
     this.playButtonAddAction();
-    this.sliderAddAction();
+    this.sliderAddMouseAction();    
   }
   
   public void updateSliderAndTotalTimeLabel() {
@@ -94,7 +97,7 @@ public class ControllerPanel extends JPanel {
     slider.setMaximum(duration);
   }
     
-  public void sliderAddAction() {
+  public void sliderAddMouseAction() {
     this.slider.addMouseListener(new MouseListener() {
 
       @Override
@@ -158,7 +161,7 @@ public class ControllerPanel extends JPanel {
           if (paused) {
             paused = false;
             try {
-              // System.out.println("Frame: " + player.getCurrentFrame());
+              System.out.println(player.getResumedFrame() + " " + player.getCurrentFrame());
               timerThread = new TimerThread(player, slider, playedTimeLabel);
               timerThread.start();
               player.play();
@@ -200,11 +203,11 @@ class TimerThread extends Thread {
       int curFrame = player.getCurrentFrame();
       int totalFrame = player.getTotalFrames();
       if (totalFrame >= curFrame && curFrame >= 0) {
-        int value = (int) (curFrame * 1.0 / totalFrame * slider.getMaximum());
+        int value = (int) ((curFrame + 1) * 1.0 / totalFrame * slider.getMaximum());
         this.slider.setValue(value);
         this.playedTimeLabel.setText(String.format("%02d:%02d", value / 60, value % 60));
         try {
-          Thread.sleep(100);
+          Thread.sleep(500);
         } catch (InterruptedException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();

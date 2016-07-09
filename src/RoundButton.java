@@ -105,7 +105,7 @@ public class RoundButton extends JButton {
 // You might want to make the highlight color 
    // a property of the RoundButton class.
       // g.setColor(Color.lightGray);
-      g2.setColor(Global.DEEP_BLUE);
+      g2.setColor(Global.SUPER_DEEP_BLUE);
     } else {
       g2.setColor(getBackground());
     }
