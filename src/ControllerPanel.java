@@ -1,9 +1,23 @@
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import javazoom.jl.decoder.JavaLayerException;
 
 public class ControllerPanel extends JPanel {
 
@@ -12,40 +26,190 @@ public class ControllerPanel extends JPanel {
   private JButton prevButton;
   private JButton playButton;
   private JButton nextButton;
+  private JLabel playedTimeLabel;
+  private JLabel totalTimeLabel;
+  private JSlider slider;
   private MediaPlayer player;
-  private boolean paused;
+  private TimerThread timerThread;
+  private ChangeListener sliderChangeListener;
+  
+  public static boolean paused = true;
+  public static boolean toggled = false;
   
   public ControllerPanel(MediaPlayer player) {
+    this.setBackground(Global.DARK_WHITE);
     this.player = player;
-    this.paused = true;
     this.setSize(1080, 100);
-    GridLayout layout = new GridLayout(1, 6);
-    playButton = new JButton("Play");
-    prevButton = new JButton("Prev");
-    nextButton = new JButton("Next");
-    this.setLayout(layout);
+    
+    this.playButton = new RoundButton("", 60, 60, 25, ButtonType.PLAY);
+    this.playButton.setBackground(Global.DEEP_BLUE);
+    // this.playButton.setPreferredSize(new Dimension(50, 50));
+    
+    this.prevButton = new RoundButton("", 60, 60, 20, ButtonType.PREV);
+    this.prevButton.setBackground(Global.DEEP_BLUE);
+    
+    this.nextButton = new RoundButton("", 60, 60, 20, ButtonType.NEXT);
+    this.nextButton.setBackground(Global.DEEP_BLUE);
+
+    this.playButton.setFont(Global.Helvetica);
+    this.prevButton.setFont(Global.Helvetica);
+    this.nextButton.setFont(Global.Helvetica);
+    this.slider = new JSlider();
+    this.slider.setValue(0);
+    this.slider.setPreferredSize(new Dimension(700, 60));
+    this.playedTimeLabel = new JLabel("00:00");
+    this.playedTimeLabel.setFont(Global.Helvetica);
+    this.playedTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    this.totalTimeLabel = new JLabel("00:00");
+    this.totalTimeLabel.setFont(Global.Helvetica);
+    this.totalTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    // GridLayout layout = new GridLayout(1, 50);
+    // BoxLayout layout = new BoxLayout();
+     // this.setLayout(layout);
     this.add(prevButton);
     this.add(playButton);
     this.add(nextButton);
+    this.add(playedTimeLabel);
+    this.add(slider);
+    this.add(totalTimeLabel);
+        
+    this.sliderChangeListener = new ChangeListener() {
+      @Override
+      public void stateChanged(ChangeEvent e) {
+        if (!slider.getValueIsAdjusting()) {
+          // System.out.println("curValue: " + slider.getValue());
+        }
+      }
+   };
     
     this.playButtonAddAction();
+    this.sliderAddAction();
+  }
+  
+  public void updateSliderAndTotalTimeLabel() {
+    int duration = (int) player.audioProperty.getDuration() / 1000000;
+    int duraMin = (int) duration / 60;
+    int duraSec = (int) duration % 60;
+    totalTimeLabel.setText(String.format("%02d:%02d", duraMin, duraSec));
+    slider.setMaximum(duration);
+  }
+    
+  public void sliderAddAction() {
+    this.slider.addMouseListener(new MouseListener() {
+
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+      }
+
+      @Override
+      public void mousePressed(MouseEvent e) {
+        // TODO Auto-generated method stub
+        ControllerPanel.toggled = true;
+        slider.addChangeListener(sliderChangeListener);
+      }
+
+      @Override
+      public void mouseReleased(MouseEvent e) {
+        // TODO Auto-generated method stub
+        ControllerPanel.toggled = false;
+        slider.removeChangeListener(sliderChangeListener);
+        int newValue = slider.getValue();
+        int newCurFrame = (int) (newValue * 1.0 / slider.getMaximum() * player.getTotalFrames());
+        try {
+          player.setPosition(newCurFrame);
+          player.setCurrentFrame(newCurFrame);
+        } catch (JavaLayerException e1) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        }
+        
+        if (!paused) {
+          timerThread = new TimerThread(player, slider, playedTimeLabel);
+          timerThread.start();
+          try {
+            player.play();
+          } catch (JavaLayerException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+          }
+        }
+      }
+
+      @Override
+      public void mouseEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+      }
+    });
   }
   
   public void playButtonAddAction() {
     this.playButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        if (player.getAudioPath() != null) {
+        if (player != null && player.getAudioPath() != null) {
           if (paused) {
             paused = false;
-            playButton.setText("Pause");
-            player.play();
+            try {
+              // System.out.println("Frame: " + player.getCurrentFrame());
+              timerThread = new TimerThread(player, slider, playedTimeLabel);
+              timerThread.start();
+              player.play();
+            } catch (Exception e1) {
+              // TODO Auto-generated catch block
+              e1.printStackTrace();
+            }
           } else {
             paused = true;
-            playButton.setText("Play");
-            player.pause();
+            try {
+              System.out.println("pause");
+              player.pause();
+              playButton.repaint();
+            } catch (Exception e1) {
+              // TODO Auto-generated catch block
+              e1.printStackTrace();
+            }
           }
         }
       }
     });
+  }
+}
+
+class TimerThread extends Thread {
+  MediaPlayer player;
+  JSlider slider;
+  JLabel playedTimeLabel;
+  
+  public TimerThread(MediaPlayer player, JSlider slider, JLabel playedTimeLabel) {
+    this.player = player;
+    this.slider = slider;
+    this.playedTimeLabel = playedTimeLabel;
+  }
+  
+  @Override
+  public void run() {
+    while (!ControllerPanel.paused && !ControllerPanel.toggled) {
+      int curFrame = player.getCurrentFrame();
+      int totalFrame = player.getTotalFrames();
+      if (totalFrame >= curFrame && curFrame >= 0) {
+        int value = (int) (curFrame * 1.0 / totalFrame * slider.getMaximum());
+        this.slider.setValue(value);
+        this.playedTimeLabel.setText(String.format("%02d:%02d", value / 60, value % 60));
+        try {
+          Thread.sleep(100);
+        } catch (InterruptedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+      }
+    }
   }
 }

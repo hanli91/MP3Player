@@ -6,7 +6,7 @@ public class AudioProperty {
   private int frameNum;
   private float frameRate;
   
-  public void init() {
+  public void clear() {
     this.title = null;
     this.artist = null;
     this.image = null;
@@ -30,6 +30,10 @@ public class AudioProperty {
   
   public void setImage(byte[] image) {
     this.image = image;
+  }
+  
+  public byte[] getImage() {
+    return this.image;
   }
   
   public void setDuration(long duration) {

@@ -19,7 +19,6 @@ public class Main extends JFrame implements Runnable {
   
   public static void main(String[] args) {
     Main.setLookAndFeel();
-    Main.loadMp3Plugin();
     SwingUtilities.invokeLater(new Main());
   }
   
@@ -37,32 +36,23 @@ public class Main extends JFrame implements Runnable {
       e.printStackTrace();
     }
   }
-  
-  public static void loadMp3Plugin() {
-    Format input1 = new AudioFormat(AudioFormat.MPEGLAYER3);
-    Format input2 = new AudioFormat(AudioFormat.MPEG);
-    Format output = new AudioFormat(AudioFormat.LINEAR);
-    PlugInManager.addPlugIn(
-      "com.sun.media.codec.audio.mp3.JavaDecoder",
-      new Format[]{input1, input2},
-      new Format[]{output},
-      PlugInManager.CODEC
-    );
-  }
-  
+
   public void init() {
-    this.setSize(1080, 720);
+    this.setSize(1080, 300);
     this.setResizable(true);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.addMenuBar();
+    // this.addMenuBar();
     this.add(controllerPanel);
     this.setVisible(true);
-    this.player.setAudioPath("./music/hotaru.mp3");
+    this.player.setAudioPath("./music/ne.mp3");
+    this.player.createPlayer();
+    this.controllerPanel.updateSliderAndTotalTimeLabel();
   }
   
   public void addMenuBar() {
     JMenuBar menuBar = new JMenuBar();
     JMenu openMenu = new JMenu("Open");
+    openMenu.setFont(Global.Helvetica);
     menuBar.add(openMenu);
     this.setJMenuBar(menuBar);
   }
