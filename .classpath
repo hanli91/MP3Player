@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+<<<<<<< HEAD
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="lib" path="/Users/lihan/Documents/workspace/MP3Player/lib/synthetica.jar"/>
 	<classpathentry kind="lib" path="/Users/lihan/Documents/workspace/MP3Player/lib/syntheticaPlain.jar"/>
@@ -12,5 +13,22 @@
 	<classpathentry kind="lib" path="/Users/lihan/Documents/workspace/MP3Player/lib/tritonus_share.jar"/>
 	<classpathentry kind="lib" path="/Users/lihan/Documents/workspace/MP3Player/lib/mp3agic-0.8.1.jar"/>
 	<classpathentry kind="lib" path="/Users/lihan/Documents/workspace/MP3Player/lib/jmf.jar"/>
+=======
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+		<accessrules>
+			<accessrule kind="accessible" pattern="javafx/scene/media/**"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/haiyun/Documents/workspace/MP3Player-HaiyunJin/lib/synthetica.jar"/>
+	<classpathentry kind="lib" path="/Users/haiyun/Documents/workspace/MP3Player-HaiyunJin/lib/syntheticaPlain.jar"/>
+	<classpathentry kind="lib" path="/Users/haiyun/Documents/workspace/MP3Player-HaiyunJin/lib/jl1.0.1.jar"/>
+	<classpathentry kind="lib" path="/Users/haiyun/Documents/workspace/MP3Player-HaiyunJin/lib/mp3spi1.9.5.jar"/>
+	<classpathentry kind="lib" path="/Users/haiyun/Documents/workspace/MP3Player-HaiyunJin/lib/customizer.jar"/>
+	<classpathentry kind="lib" path="/Users/haiyun/Documents/workspace/MP3Player-HaiyunJin/lib/mediaplayer.jar"/>
+	<classpathentry kind="lib" path="/Users/haiyun/Documents/workspace/MP3Player-HaiyunJin/lib/multiplayer.jar"/>
+	<classpathentry kind="lib" path="/Users/haiyun/Documents/workspace/MP3Player-HaiyunJin/lib/tritonus_share.jar"/>
+	<classpathentry kind="lib" path="/Users/haiyun/Documents/workspace/MP3Player-HaiyunJin/lib/mp3agic-0.8.1.jar"/>
+	<classpathentry kind="lib" path="/Users/haiyun/Documents/workspace/MP3Player-HaiyunJin/lib/jmf.jar"/>
+>>>>>>> c7ea810dc921feda37ab582f415b6b764ca746c7
 	<classpathentry kind="output" path="bin"/>
 </classpath>

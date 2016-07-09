@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 ./bin
 ./music
 .classpath
 .DS_Store
+=======
+
+.DS_Store
+.classpath
+./bin
+/bin/
+>>>>>>> c7ea810dc921feda37ab582f415b6b764ca746c7

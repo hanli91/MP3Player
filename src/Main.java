@@ -6,6 +6,7 @@ import javax.media.PlugInManager;
 import javax.media.format.AudioFormat;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -28,10 +29,10 @@ public class Main extends JFrame implements Runnable {
   }
   
   public Main() {
-    this.player = new MediaPlayer();
-    this.controllerPanel = new ControllerPanel(this.player);
-    this.playlistPanel = new PlaylistPanel();
-    this.lyricPanel = new LyricPanel();    
+    this.player = new MediaPlayer();    
+    this.lyricPanel = new LyricPanel(this.player);
+    this.controllerPanel = new ControllerPanel(this.player,this.lyricPanel);
+    this.playlistPanel = new PlaylistPanel(this.player);
   }
   
   public static void setLookAndFeel() {
@@ -51,11 +52,12 @@ public class Main extends JFrame implements Runnable {
     JPanel basePanel = new JPanel();
     basePanel.setPreferredSize(Global.FRAME_SIZE);
     this.add(basePanel);
-    
     BoxLayout boxLayout = new BoxLayout(basePanel, BoxLayout.Y_AXIS);
     basePanel.setLayout(boxLayout);
     
     JPanel mixedPanel = new JPanel();
+    BoxLayout boxLayout2 = new BoxLayout(mixedPanel, BoxLayout.X_AXIS);
+    mixedPanel.setLayout(boxLayout2);
     mixedPanel.setPreferredSize(Global.VERTICAL_MIXED_PANEL_SIZE);
     JPanel horizontalborderPanel = new JPanel();
     horizontalborderPanel.setPreferredSize(Global.HORIZONTAL_BORDER_SIZE);
@@ -73,9 +75,12 @@ public class Main extends JFrame implements Runnable {
     basePanel.add(controllerPanel);
     
     this.setVisible(true);
-    this.player.setAudioPath("./music/ne.mp3");
+    String mp3Path = "./music/ne.mp3";
+    this.player.setAudioPath(mp3Path);
     this.player.createPlayer();
+//    this.lyricPanel.updateSliderAndTotalTimeLabel();
     this.controllerPanel.updateSliderAndTotalTimeLabel();
+
   }
   
   public void addMenuBar() {
