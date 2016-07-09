@@ -19,6 +19,12 @@ import javax.swing.event.ChangeListener;
 
 import javazoom.jl.decoder.JavaLayerException;
 
+
+/**
+ * controller panel
+ * @author haiyun
+ *
+ */
 public class ControllerPanel extends JPanel {
 
   private static final long serialVersionUID = 1L;

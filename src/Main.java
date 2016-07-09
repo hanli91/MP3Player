@@ -44,7 +44,8 @@ public class Main extends JFrame implements Runnable {
     // this.addMenuBar();
     this.add(controllerPanel);
     this.setVisible(true);
-    this.player.setAudioPath("./music/ne.mp3");
+    String mp3Path = "/Users/haiyun/music/我觉得好听的/王菲 - 匆匆那年.mp3";
+    this.player.setAudioPath(mp3Path);
     this.player.createPlayer();
     this.controllerPanel.updateSliderAndTotalTimeLabel();
   }
