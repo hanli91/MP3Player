@@ -226,7 +226,20 @@ class TimerThread extends Thread {
           // TODO Auto-generated catch block
           e.printStackTrace();
         }
-      }
+      } 
+//      // Attemp to implement cycle, failed.
+//      else {
+//    	  start();
+//          try {
+//			player.setPosition(1);
+//	        player.setCurrentFrame(1);
+//			player.play();
+//          } catch (JavaLayerException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//      }
+//      //////
     }
   }
 }

@@ -75,7 +75,7 @@ public class Main extends JFrame implements Runnable {
     basePanel.add(controllerPanel);
     
     this.setVisible(true);
-    String mp3Path = "./music/ne.mp3";
+    String mp3Path = "./music/王菲-匆匆那年.mp3";
     this.player.setAudioPath(mp3Path);
     this.player.createPlayer();
 //    this.lyricPanel.updateSliderAndTotalTimeLabel();
