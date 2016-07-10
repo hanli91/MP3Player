@@ -19,11 +19,12 @@ public class Global {
     new Color(45, 92, 162),
     new Color(84, 123, 200));
   
-  public static final Dimension FRAME_SIZE = new Dimension(1000, 650);
-  public static final Dimension VERTICAL_MIXED_PANEL_SIZE = new Dimension(1000, 600);
-  public static final Dimension PLAYLIST_PANEL_SIZE = new Dimension(300, 600);
-  public static final Dimension HORIZONTAL_BORDER_SIZE = new Dimension(2, 600);
-  public static final Dimension LYRIC_PANEL_SIZE = new Dimension(698, 600);
+  static final int HEIGHT = 500;
+  public static final Dimension FRAME_SIZE = new Dimension(1000, HEIGHT+62);
+  public static final Dimension VERTICAL_MIXED_PANEL_SIZE = new Dimension(1000, HEIGHT);
+  public static final Dimension PLAYLIST_PANEL_SIZE = new Dimension(300, HEIGHT);
+  public static final Dimension HORIZONTAL_BORDER_SIZE = new Dimension(2, HEIGHT);
+  public static final Dimension LYRIC_PANEL_SIZE = new Dimension(698, HEIGHT);
   public static final Dimension VERTICAL_BORDER_SIZE = new Dimension(1000, 2);
   public static final Dimension CONTROLLER_PANEL_SIZE = new Dimension(1000, 60);
 }
